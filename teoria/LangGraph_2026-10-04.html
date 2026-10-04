@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LangGraph · Unidades 1-3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --text: #1c1917;
+    --muted: #57534e;
+    --border: #e7e5e4;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --code-inline-bg: #f1f0ee;
+    --code-bg: #0d1117;
+    --callout-bg: #f0fdf4;
+    --callout-border: #16a34a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c0a09;
+      --surface: #1c1917;
+      --text: #e7e5e4;
+      --muted: #a8a29e;
+      --border: #292524;
+      --accent: #818cf8;
+      --accent-soft: #1e1b4b;
+      --code-inline-bg: #292524;
+      --code-bg: #0d1117;
+      --callout-bg: #052e16;
+      --callout-border: #22c55e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c0a09;
+    --surface: #1c1917;
+    --text: #e7e5e4;
+    --muted: #a8a29e;
+    --border: #292524;
+    --accent: #818cf8;
+    --accent-soft: #1e1b4b;
+    --code-inline-bg: #292524;
+    --code-bg: #0d1117;
+    --callout-bg: #052e16;
+    --callout-border: #22c55e;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 48px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  nav.toc {
+    position: sticky;
+    top: 32px;
+    align-self: start;
+    font-size: 14px;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  nav.toc h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin: 0 0 12px;
+    border: 0;
+    padding: 0;
+  }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; }
+  nav.toc a {
+    display: block;
+    padding: 6px 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid var(--border);
+  }
+  nav.toc a:hover, nav.toc a.active { color: var(--accent); border-left-color: var(--accent); }
+  main { max-width: 760px; min-width: 0; }
+
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+  h1 { font-size: 2.3rem; line-height: 1.2; margin: 8px 0 24px; letter-spacing: -.02em; }
+  h2 {
+    font-size: 1.6rem;
+    margin: 64px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    letter-spacing: -.01em;
+    scroll-margin-top: 24px;
+  }
+  h3 { font-size: 1.2rem; margin: 36px 0 8px; scroll-margin-top: 24px; }
+  p { margin: 0 0 16px; }
+  ul, ol { padding-left: 24px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  strong { font-weight: 600; }
+  a { color: var(--accent); }
+
+  code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: .88em;
+    background: var(--code-inline-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    margin: 0 0 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+  }
+  pre code {
+    display: block;
+    padding: 18px 20px;
+    background: transparent;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e6edf3;
+  }
+  pre code.hljs { background: transparent; }
+  .code-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin: 0 0 6px;
+  }
+
+  .callout {
+    background: var(--callout-bg);
+    border-left: 4px solid var(--callout-border);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 0 0 20px;
+  }
+  .callout p:last-child { margin: 0; }
+  .intro-note {
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 24px 0;
+  }
+
+  .metaphor {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 0 0 20px;
+  }
+  .metaphor div {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  .metaphor strong { display: block; margin-bottom: 4px; color: var(--accent); }
+
+  nav.toc h2.toc-unit { margin-top: 28px; }
+  .unit-break { margin-top: 96px; padding-top: 32px; border-top: 3px solid var(--accent); }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding: 56px 16px 64px; }
+    nav.toc { position: static; max-height: none; margin-bottom: 32px; }
+    h1 { font-size: 1.8rem; }
+    body { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button">Tema</button>
+
+<div class="layout">
+<nav class="toc" aria-label="Contenido">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#s1">1. ¿Por qué LangGraph?</a></li>
+    <li><a href="#s2">2. El Estado</a></li>
+    <li><a href="#s3">3. Nodos</a></li>
+    <li><a href="#s4">4. Aristas</a></li>
+    <li><a href="#s5">5. Compiled Graph</a></li>
+    <li><a href="#s6">6. Errores comunes</a></li>
+    <li><a href="#s7">7. Ejemplos resueltos</a></li>
+    <li><a href="#s8">8. Síntesis</a></li>
+  </ol>
+  <h2 class="toc-unit">Unidad 2 · Tool Calling</h2>
+  <ol>
+    <li><a href="#u2s1">1. ¿Qué es Tool Calling?</a></li>
+    <li><a href="#u2s2">2. El contrato</a></li>
+    <li><a href="#u2s3">3. Pydantic y LangChain</a></li>
+    <li><a href="#u2s4">4. Reason-Act Loop</a></li>
+    <li><a href="#u2s5">5. Errores y seguridad</a></li>
+    <li><a href="#u2s6">6. Síntesis</a></li>
+  </ol>
+  <h2 class="toc-unit">Unidad 3 · ReAct y Checkpoints</h2>
+  <ol>
+    <li><a href="#u3s1">1. El ciclo ReAct</a></li>
+    <li><a href="#u3s2">2. Checkpoints</a></li>
+    <li><a href="#u3s3">3. Enunciado del problema</a></li>
+  </ol>
+</nav>
+
+<main>
+  <div class="eyebrow">Módulo 5 · Unidad 1</div>
+  <h1>Arquitectura de grafos: nodos, aristas y estado en LangGraph</h1>
+
+  <p>Bienvenido al Módulo 5. Hasta ahora, has construido cadenas lineales con LCEL y has implementado arquitecturas RAG para dotar a tus modelos de una base de conocimientos. Sin embargo, en el mundo real, los problemas rara vez son lineales. Los sistemas de IA más avanzados no solo "responden", sino que razonan, iteran y corrigen sus propios errores.</p>
+
+  <p>Imagina un sistema de soporte técnico. No es una simple secuencia de pasos; es un flujo donde, dependiendo de la complejidad, el caso puede resolverse, pedir más información al usuario o escalarse a un humano. Intentar programar esto con cadenas <code>if/else</code> interminables o loops de chat básicos resulta en un código frágil, difícil de depurar y casi imposible de escalar.</p>
+
+  <p>Aquí es donde entra <strong>LangGraph</strong>. En esta unidad, aprenderás a pensar en términos de <strong>Grafos de Estado</strong>, una evolución necesaria para construir agentes autónomos con principios de ingeniería de software.</p>
+
+  <div class="intro-note">🎯 <strong>A dónde vas con este módulo</strong> (leé esto primero)</div>
+
+  <h2 id="s1">1. ¿Por qué LangGraph? El paso de Cadenas a Grafos</h2>
+  <p>En los módulos anteriores, utilizamos LangChain para crear secuencias de pasos (cadenas). Estas cadenas son excelentes para flujos de trabajo predecibles:</p>
+  <pre><code class="language-plaintext">Input -&gt; Prompt -&gt; LLM -&gt; Output</code></pre>
+  <p>Sin embargo, los agentes autónomos requieren <strong>ciclos</strong>. Un agente necesita observar el resultado de una herramienta y decidir: <em>"¿He terminado?"</em> o <em>"¿Debo intentar otra cosa?"</em>. Las cadenas de LangChain (DAGs por naturaleza en su versión básica) dificultan la implementación de estos ciclos de forma limpia.</p>
+  <p>LangGraph extiende LangChain permitiendo la creación de grafos que pueden contener ciclos. Pero lo más importante no es el ciclo en sí, sino la <strong>gestión del estado</strong>. En un sistema complejo, necesitamos una "memoria de trabajo" que persista mientras el agente navega por diferentes procesos.</p>
+
+  <h2 id="s2">2. El Estado: La Memoria Compartida del Grafo</h2>
+  <p>El concepto más fundamental en LangGraph es el <strong>Estado (State)</strong>. Si visualizamos el grafo como una línea de ensamblaje en una fábrica, el Estado es el producto que se mueve por la cinta transportadora. Cada estación (nodo) puede leer el producto, modificarlo o añadirle piezas antes de pasarlo a la siguiente.</p>
+
+  <h3>Definición mediante <code>TypedDict</code></h3>
+  <p>En Python 3.12+, definimos el estado utilizando <code>TypedDict</code>. Esto nos permite tener un esquema claro y tipado de qué datos están "vivos" en nuestra aplicación.</p>
+<pre><code class="language-python">from typing import Annotated, TypedDict, List
+from langchain_core.messages import BaseMessage
+from langgraph.graph.message import add_messages
+
+# Definimos el esquema de nuestra "memoria de trabajo"
+class AgentState(TypedDict):
+    # El historial de mensajes es el estado más común
+    # Usamos Annotated y un "reducer" para decidir cómo se actualiza este campo
+    messages: Annotated[List[BaseMessage], add_messages]
+    # Podemos añadir campos personalizados para lógica de negocio
+    is_escalated: bool
+    current_step: str</code></pre>
+
+  <h3>El concepto de Reducers</h3>
+  <p>Un error común es pensar que un nodo sobrescribe todo el estado. En realidad, los nodos devuelven <strong>actualizaciones</strong>. Si el estado tiene 10 campos y un nodo devuelve un diccionario con 1 campo, solo ese campo se actualiza.</p>
+  <p>¿Qué pasa si queremos que una lista de mensajes crezca en lugar de sobrescribirse? Usamos un <strong>Reducer</strong>. En el ejemplo de arriba, <code>add_messages</code> es una función que le dice a LangGraph: <em>"No borres los mensajes anteriores, anexa los nuevos a la lista"</em>.</p>
+
+  <h2 id="s3">3. Nodos: Las Unidades de Trabajo</h2>
+  <p>Los <strong>Nodos</strong> son simplemente funciones de Python (síncronas o <code>async</code>) que toman el estado actual como entrada y devuelven una actualización del estado.</p>
+  <p>Un nodo no tiene por qué ser un LLM. Puede ser:</p>
+  <ul>
+    <li><strong>Un llamado a un LLM:</strong> procesa el historial de mensajes y decide qué hacer.</li>
+    <li><strong>Una herramienta (Tool):</strong> realiza una consulta a una base de datos o API.</li>
+    <li><strong>Lógica de negocio:</strong> valida un JSON, formatea un texto o cambia una bandera en el estado.</li>
+  </ul>
+
+  <h3>Anatomía de un Nodo</h3>
+<pre><code class="language-python">async def call_model(state: AgentState):
+    # 1. Recuperamos información del estado
+    messages = state['messages']
+
+    # 2. Realizamos la operación (ej: llamado al LLM)
+    response = await model.ainvoke(messages)
+
+    # 3. Devolvemos la actualización
+    # LangGraph se encarga de fusionar esto con el estado global
+    return {"messages": [response]}</code></pre>
+
+  <div class="callout"><p><strong>Principio de diseño:</strong> Mantén los nodos pequeños y con una única responsabilidad. Esto facilita las pruebas unitarias y la observabilidad. En LangGraph, un nodo es una unidad de software testeable, no una "caja negra mágica".</p></div>
+
+  <h2 id="s4">4. Aristas: El Control de Flujo</h2>
+  <p>Si los nodos son las estaciones de trabajo, las <strong>Aristas (Edges)</strong> son las reglas que definen hacia dónde se mueve el producto después de salir de una estación.</p>
+  <p>Existen dos tipos principales de aristas:</p>
+
+  <h3>A. Aristas Directas (Normal Edges)</h3>
+  <p>Simplemente conectan el Nodo A con el Nodo B: <em>"Siempre que termines de procesar en A, ve a B"</em>.</p>
+<pre><code class="language-python">workflow.add_edge("limpiar_texto", "analizar_sentimiento")</code></pre>
+
+  <h3>B. Aristas Condicionales (Conditional Edges)</h3>
+  <p>Permiten que el flujo se bifurque basándose en la lógica. Se apoyan en una <strong>función de enrutamiento</strong>.</p>
+<pre><code class="language-python">def route_after_analysis(state: AgentState):
+    # Si el sentimiento es negativo, escalamos a un humano
+    if state["sentiment"] == "negative":
+        return "human_support"
+    # Si no, terminamos
+    return "end"
+
+# En la definición del grafo:
+workflow.add_conditional_edges(
+    "analizar_sentimiento",
+    route_after_analysis,
+    {
+        "human_support": "nodo_humano",
+        "end": END
+    }
+)</code></pre>
+  <p>Aquí es donde ocurre la "magia" de los agentes autónomos. Una arista condicional puede devolver el flujo a un nodo anterior, creando un <strong>ciclo de reflexión</strong>. Por ejemplo, un nodo "Validador" podría decidir que la respuesta del LLM no es lo suficientemente buena y enviarla de vuelta al nodo "Escritor" para una corrección.</p>
+
+  <h2 id="s5">5. El Flujo de Trabajo (Compiled Graph)</h2>
+  <p>Una vez definidos los nodos y las aristas, el grafo debe ser <strong>compilado</strong>. Al compilarlo, LangGraph valida que:</p>
+  <ul>
+    <li>Haya un punto de entrada (<code>START</code>).</li>
+    <li>Todos los caminos tengan una salida posible o lleguen al nodo especial <code>END</code>.</li>
+    <li>No existan nodos aislados.</li>
+  </ul>
+
+  <h3>Metáfora del "Libro de Elige tu propia aventura"</h3>
+  <p>Imagina que cada nodo es una página del libro.</p>
+  <div class="metaphor">
+    <div><strong>Estado</strong>Lo que el lector recuerda (su inventario, su salud).</div>
+    <div><strong>Nodos</strong>El contenido de la página que el lector lee.</div>
+    <div><strong>Aristas</strong>Las instrucciones al final de la página: <em>"Si decides abrir la puerta, ve a la página 45; si decides correr, ve a la página 12"</em>.</div>
+    <div><strong>Aristas condicionales</strong>Instrucciones basadas en el inventario: <em>"Si tienes la llave dorada (estado), ve a la página 100; si no, ve a la página 20"</em>.</div>
+  </div>
+
+  <h2 id="s6">6. Errores Comunes y Mejores Prácticas</h2>
+
+  <h3>Error 1: Cargar el Estado con datos innecesarios</h3>
+  <p>Un error frecuente es intentar meter objetos pesados (como clientes de bases de datos o conexiones de red) dentro del objeto <code>State</code>.</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> El estado debe contener solo datos que necesiten persistir o ser compartidos entre nodos. Los objetos de infraestructura deben pasarse a través de la configuración o ser parte de la clase que envuelve al grafo.</p></div>
+
+  <h3>Error 2: Nodos demasiado grandes</h3>
+  <p>Si un nodo hace un llamado al LLM, procesa el resultado, limpia los datos y guarda en la base de datos, estás perdiendo el beneficio de la granularidad de los grafos.</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> Divide las operaciones. Un nodo para el LLM y un nodo para el post-procesamiento. Esto permite insertar aristas condicionales en medio (ej. <em>"¿Logró el LLM extraer los datos correctamente o necesitamos reintentar?"</em>).</p></div>
+
+  <h3>Error 3: Olvidar el Reducer en listas de mensajes</h3>
+  <p>Si defines <code>messages: List[BaseMessage]</code> en tu <code>TypedDict</code> sin un reducer, cada vez que un nodo devuelva <code>{"messages": [new_msg]}</code>, la lista anterior desaparecerá.</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> Usa siempre <code>Annotated[List[BaseMessage], add_messages]</code> para flujos de chat convencionales.</p></div>
+
+  <h2 id="s7">7. Ejemplo resuelto paso a paso: un grafo de soporte con ciclo y escalado</h2>
+  <p>El entregable de esta unidad te pide diseñar el diagrama. Acá ves su contraparte en código, completa y ejecutable: un grafo mínimo que busca una solución, reintenta si no la encuentra (ciclo) y escala a un humano tras 3 intentos. Corre sin API keys, porque simulamos el nodo de búsqueda con lógica simple para que puedas ver la mecánica del grafo.</p>
+<pre><code class="language-python">from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+# 1. El Estado: la "memoria de trabajo" que fluye por el grafo
+class SupportState(TypedDict):
+    query: str
+    attempts: int
+    solved: bool
+    escalated: bool
+
+# 2. Nodo: busca en la base de conocimiento (simulado)
+def search_knowledge(state: SupportState) -&gt; dict:
+    intento = state["attempts"] + 1
+    encontrado = intento &gt;= 2          # simulamos que recién resuelve en el 2º intento
+    print(f"[search] intento {intento} -&gt; {'resuelto' if encontrado else 'sin resultado'}")
+    return {"attempts": intento, "solved": encontrado}
+
+# 3. Nodo: escala a un humano
+def human_support(state: SupportState) -&gt; dict:
+    print("[human] caso escalado a soporte humano")
+    return {"escalated": True}
+
+# 4. Arista condicional: decide el camino según el estado
+def route(state: SupportState) -&gt; str:
+    if state["solved"]:
+        return "end"
+    if state["attempts"] &gt;= 3:         # corta el ciclo para no quedar infinito
+        return "escalate"
+    return "retry"                     # vuelve a 'search' -&gt; esto crea el CICLO
+
+# 5. Construcción del grafo
+workflow = StateGraph(SupportState)
+workflow.add_node("search", search_knowledge)
+workflow.add_node("human", human_support)
+workflow.add_edge(START, "search")
+workflow.add_conditional_edges(
+    "search",
+    route,
+    {"end": END, "escalate": "human", "retry": "search"},
+)
+workflow.add_edge("human", END)
+app = workflow.compile()
+
+# 6. Ejecución
+final = app.invoke(
+    {"query": "No puedo iniciar sesión", "attempts": 0, "solved": False, "escalated": False}
+)
+print(final)</code></pre>
+
+  <p class="code-label">Salida esperada</p>
+<pre><code class="language-plaintext">[search] intento 1 -&gt; sin resultado
+[search] intento 2 -&gt; resuelto
+{'query': 'No puedo iniciar sesión', 'attempts': 2, 'solved': True, 'escalated': False}</code></pre>
+
+  <p><strong>Qué pasó, paso a paso:</strong></p>
+  <ol>
+    <li>El Estado (<code>SupportState</code>) arranca con <code>attempts=0</code>. Cada nodo devuelve solo los campos que cambia (una actualización), no el estado completo; LangGraph se encarga de fusionarlo.</li>
+    <li><code>START → search</code>: el primer intento no encuentra solución (<code>solved=False</code>).</li>
+    <li>La arista condicional <code>route</code> lee el estado: como no está resuelto y aún no llegó a 3 intentos, devuelve <code>"retry"</code>, que vuelve al nodo <code>search</code>. Ese retorno a un nodo anterior es el <strong>ciclo</strong> que diferencia a LangGraph de una cadena lineal.</li>
+    <li>En el segundo intento <code>solved=True</code>, así que <code>route</code> devuelve <code>"end"</code> y el grafo termina sin escalar.</li>
+    <li>Si la búsqueda nunca resolviera, al llegar a <code>attempts &gt;= 3</code> la ruta sería <code>"escalate"</code> → nodo <code>human</code> → <code>escalated=True</code> → <code>END</code>. Probalo cambiando la condición <code>encontrado</code> a <code>False</code> para ver ese camino.</li>
+  </ol>
+  <p>Cuando armes el diagrama del entregable, este código es el "esqueleto" que estás representando: <strong>nodos</strong> = cajas, <code>add_conditional_edges</code> = la bifurcación, y el <code>"retry"</code> = la flecha que vuelve hacia atrás.</p>
+
+  <h3>Segundo ejemplo resuelto: bucle de reflexión (escritor ↔ crítico)</h3>
+  <p>El primer ejemplo usó un ciclo de reintento. Este muestra el otro patrón cíclico clásico de los agentes: el <strong>bucle de reflexión</strong>, donde un nodo "escritor" genera y un nodo "crítico" decide si está lo bastante bueno o si hay que revisar otra vez. Corre sin API keys (simulamos que la calidad mejora en cada vuelta).</p>
+<pre><code class="language-python">from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+# 1. Estado: el borrador, su puntaje de calidad y cuántas veces lo revisamos
+class WriteState(TypedDict):
+    tema: str
+    borrador: str
+    score: int
+    revisiones: int
+
+# 2. Nodo escritor: genera/mejora el borrador (simulado: suma 3 puntos por vuelta)
+def escribir(state: WriteState) -&gt; dict:
+    nuevo_score = state["score"] + 3
+    print(f"[escritor] revisión {state['revisiones'] + 1} -&gt; score {nuevo_score}")
+    return {
+        "borrador": f"Borrador sobre '{state['tema']}' (calidad {nuevo_score}/10)",
+        "score": nuevo_score,
+        "revisiones": state["revisiones"] + 1,
+    }
+
+# 3. Nodo crítico: no modifica el estado; la decisión la toma la arista condicional
+def criticar(state: WriteState) -&gt; dict:
+    return {}
+
+# 4. Arista condicional: ¿aprobamos, nos rendimos o seguimos revisando?
+def route(state: WriteState) -&gt; str:
+    if state["score"] &gt;= 8:
+        return "aprobado"
+    if state["revisiones"] &gt;= 4:        # tope para no iterar infinito
+        return "rendirse"
+    return "revisar"                    # vuelve al escritor -&gt; CICLO de reflexión
+
+# 5. Construcción del grafo
+g = StateGraph(WriteState)
+g.add_node("escritor", escribir)
+g.add_node("critico", criticar)
+g.add_edge(START, "escritor")
+g.add_edge("escritor", "critico")
+g.add_conditional_edges(
+    "critico",
+    route,
+    {"aprobado": END, "rendirse": END, "revisar": "escritor"},
+)
+app = g.compile()
+
+# 6. Ejecución
+final = app.invoke({"tema": "onboarding de usuarios", "borrador": "", "score": 0, "revisiones": 0})
+print(f"Final tras {final['revisiones']} revisiones | score {final['score']}")
+print(final["borrador"])</code></pre>
+
+  <p class="code-label">Salida esperada</p>
+<pre><code class="language-plaintext">[escritor] revisión 1 -&gt; score 3
+[escritor] revisión 2 -&gt; score 6
+[escritor] revisión 3 -&gt; score 9
+Final tras 3 revisiones | score 9
+Borrador sobre 'onboarding de usuarios' (calidad 9/10)</code></pre>
+
+  <p><strong>Qué pasó, paso a paso:</strong></p>
+  <ol>
+    <li>El flujo es <code>escritor → crítico → (decisión)</code>. El crítico no cambia el estado; solo es el punto donde la arista condicional evalúa.</li>
+    <li>Tras cada vuelta, <code>route</code> mira el <code>score</code>: si llega a 8 termina (<code>aprobado</code>); si no, vuelve al escritor (<code>revisar</code>). Ese retorno es el <strong>ciclo de reflexión</strong>.</li>
+    <li>La condición <code>revisiones &gt;= 4</code> es un <strong>freno de seguridad</strong>: sin él, un borrador que nunca llega a 8 generaría un loop infinito.</li>
+    <li>En 3 vueltas el score pasa 3 → 6 → 9 y se aprueba.</li>
+  </ol>
+  <p>A diferencia del primer ejemplo (ciclo de reintento ante un fallo), este es un <strong>ciclo de mejora iterativa</strong>: el sistema se autocritica hasta alcanzar un umbral de calidad. Es la base de los agentes "reflexivos".</p>
+
+  <h2 id="s8">8. Síntesis y Conexiones</h2>
+  <p>En esta unidad hemos sentado las bases arquitectónicas de los sistemas de IA del futuro. En lugar de scripts lineales, ahora diseñamos sistemas dinámicos.</p>
+  <p><strong>Puntos clave:</strong></p>
+  <ul>
+    <li><strong>Estado:</strong> la única fuente de verdad tipada que fluye por el sistema.</li>
+    <li><strong>Nodos:</strong> funciones aisladas que transforman el estado.</li>
+    <li><strong>Aristas:</strong> reglas de navegación que permiten ciclos y bifurcaciones.</li>
+  </ul>
+  <p>En la siguiente unidad, daremos vida a estos nodos integrando <strong>Tool Calling</strong>, permitiendo que el estado no solo guarde texto, sino también los resultados de acciones ejecutadas en el mundo real. ¡Prepárate para conectar tu grafo con herramientas externas!</p>
+
+  <section class="unit-break">
+  <div class="eyebrow">Módulo 5 · Unidad 2</div>
+  <h1>Tool Calling: definición y ejecución segura</h1>
+
+  <p>En el desarrollo de sistemas de IA, un LLM "desnudo" es como un cerebro brillante en una habitación sin ventanas: puede razonar, pero no puede interactuar con el mundo exterior. El <strong>Tool Calling</strong> (invocación de herramientas) es el mecanismo que le da "manos" a ese cerebro.</p>
+
+  <h2 id="u2s1">1. ¿Qué es Tool Calling?</h2>
+  <p>El modelo <strong>no ejecuta código Python directamente</strong>. En su lugar, genera una solicitud estructurada (usualmente JSON) indicando qué función quiere ejecutar y con qué parámetros. Tu aplicación intercepta esa solicitud, ejecuta el código real y le devuelve el resultado al modelo.</p>
+
+  <h2 id="u2s2">2. El "contrato" de la herramienta</h2>
+  <p>Para que un modelo como GPT-4 o Claude 3.5 use una herramienta con éxito, necesita un contrato claro. Este contrato tiene cuatro pilares:</p>
+  <div class="metaphor">
+    <div><strong>Nombre</strong>Identificador único (ej. <code>get_stock_price</code>).</div>
+    <div><strong>Descripción</strong>Explicación semántica. El LLM decide si usar la herramienta basándose en esto.</div>
+    <div><strong>Esquema de entrada</strong>Definición estricta de variables (tipos, obligatoriedad).</div>
+    <div><strong>Esquema de salida</strong>Qué esperar de vuelta.</div>
+  </div>
+
+  <h2 id="u2s3">3. Definición segura con Pydantic y LangChain</h2>
+  <p>En entornos escalables no podemos confiar en que el LLM envíe siempre los datos correctos. Usamos <strong>Pydantic</strong> para validar los tipos antes de que el código toque nuestra infraestructura.</p>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+from langchain_core.tools import tool
+
+class CalculatorInput(BaseModel):
+    a: int = Field(description="Primer número")
+    b: int = Field(description="Segundo número")
+
+@tool(args_schema=CalculatorInput)
+def multiply(a: int, b: int) -&gt; int:
+    """Multiplica dos números enteros."""
+    return a * b</code></pre>
+
+  <h2 id="u2s4">4. El ciclo de ejecución (Reason-Act Loop)</h2>
+  <ol>
+    <li><strong>Reasoning:</strong> el LLM recibe el prompt y las definiciones de herramientas. Decide que necesita <code>multiply</code>.</li>
+    <li><strong>Tool Call:</strong> el LLM responde con un objeto especial: <code>tool_calls: [{name: 'multiply', args: {a: 5, b: 2}}]</code>.</li>
+    <li><strong>Execution (local):</strong> tu servidor detecta esta intención, valida los argumentos con Pydantic y ejecuta la función <code>multiply(5, 2)</code>.</li>
+    <li><strong>Observation:</strong> el resultado (<code>10</code>) se envía de vuelta al LLM en un nuevo mensaje con el rol <code>tool</code>.</li>
+    <li><strong>Final Response:</strong> el LLM procesa el <code>10</code> y responde al usuario: <em>"El resultado es 10"</em>.</li>
+  </ol>
+
+  <h2 id="u2s5">5. Errores comunes y seguridad</h2>
+
+  <h3>Error 1: Confundir invocación con ejecución</h3>
+  <p>El LLM no ejecuta el código. Tu arquitectura debe garantizar que las herramientas tengan permisos limitados (<strong>Least Privilege</strong>).</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> Nunca permitas que una herramienta ejecute SQL raw generado por el LLM sin validación.</p></div>
+
+  <h3>Error 2: Descripciones ambiguas</h3>
+  <p>Si tu descripción es <em>"Busca datos"</em>, el modelo fallará.</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> Sé específico: <em>"Busca precios de acciones en tiempo real para empresas del S&amp;P 500"</em>.</p></div>
+
+  <h3>Error 3: Ignorar errores</h3>
+  <p>Si la herramienta falla (ej. timeout de API) y no se maneja, el agente se rompe o queda sin contexto.</p>
+  <div class="callout"><p><strong>Mejor práctica:</strong> Captura el error y envíalo como un string al LLM, para que este pueda explicarle al usuario qué salió mal o intentar otra estrategia.</p></div>
+
+  <h2 id="u2s6">6. Síntesis y conexiones</h2>
+  <p>En la siguiente práctica conectarás este concepto con el sistema RAG que construiste anteriormente, permitiendo que tu agente decida cuándo consultar la base de conocimientos.</p>
+  </section>
+
+  <section class="unit-break">
+  <div class="eyebrow">Módulo 5 · Unidad 3</div>
+  <h1>Ciclos ReAct y persistencia de checkpoints en agentes autónomos</h1>
+
+  <p>Como arquitecto de IA, tu objetivo no es solo que el sistema responda, sino que sea <strong>resiliente</strong>. En sistemas complejos, un agente puede fallar a mitad de una ejecución de 10 pasos debido a un error de red o un timeout. Sin persistencia, perderías todo el razonamiento y los resultados parciales (y el dinero gastado en tokens).</p>
+
+  <h2 id="u3s1">1. El ciclo ReAct (Reasoning + Acting)</h2>
+  <p>El patrón <strong>ReAct</strong> es el estándar de oro para agentes autónomos. A diferencia de una cadena lineal, ReAct permite al LLM:</p>
+  <div class="metaphor">
+    <div><strong>Pensar (Reason)</strong>Analizar la solicitud del usuario y decidir qué necesita.</div>
+    <div><strong>Actuar (Act)</strong>Seleccionar una herramienta y generar los parámetros de llamada.</div>
+    <div><strong>Observar (Observe)</strong>Recibir la salida de la herramienta y re-evaluar el estado.</div>
+  </div>
+  <p>Este proceso es <strong>cíclico</strong>. El LLM puede decidir que necesita usar tres herramientas diferentes antes de dar una respuesta final. LangGraph facilita esto permitiendo que una arista (edge) vuelva al mismo nodo o a un nodo anterior, creando un historial de mensajes que crece con cada "observación".</p>
+
+  <h2 id="u3s2">2. Checkpoints: la caja negra de tu agente</h2>
+  <p>En LangGraph, un <strong>Checkpointer</strong> es un mecanismo de almacenamiento que guarda una "fotografía" del estado del grafo después de cada nodo ejecutado.</p>
+  <ul>
+    <li><strong>Para qué sirve:</strong> si el proceso se detiene, puedes reanudarlo simplemente pasando el mismo <code>thread_id</code>. El sistema buscará en la base de datos (SQLite, Redis o memoria) y cargará el último estado conocido.</li>
+    <li><strong>Time Travel:</strong> los checkpoints permiten no solo reanudar, sino "volver atrás" en el tiempo (debugging) o requerir aprobación humana antes de continuar con un nodo crítico (<strong>Human-in-the-loop</strong>).</li>
+  </ul>
+
+  <h2 id="u3s3">3. Enunciado del problema</h2>
+  <p>Vas a construir un <strong>agente climatológico</strong> capaz de razonar si necesita herramientas y que no pierda la memoria incluso si interrumpimos la ejecución del script.</p>
+
+  <h3>Objetivo</h3>
+  <ul>
+    <li>Implementar un ciclo ReAct completo.</li>
+    <li>Configurar persistencia en memoria.</li>
+    <li>Demostrar que el agente recuerda la ubicación mencionada en el primer mensaje al recibir un segundo mensaje, gracias al <code>thread_id</code>.</li>
+  </ul>
+
+  <h3>Restricciones</h3>
+  <ul>
+    <li>Usa <code>Annotated[list[BaseMessage], add_messages]</code> en tu estado para asegurar que los mensajes no se sobrescriban, sino que se concatenen.</li>
+    <li>El grafo debe terminar solo cuando el LLM decida que no hay más herramientas que llamar.</li>
+    <li>No olvides que el nodo de herramientas (<code>ToolNode</code>) debe mapear sus resultados de vuelta al agente.</li>
+  </ul>
+  </section>
+</main>
+</div>
+
+<script>
+  if (window.hljs) hljs.highlightAll();
+
+  // Tema claro/oscuro
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  try {
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  btn.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    const next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Resaltar sección activa en el índice
+  const links = [...document.querySelectorAll('nav.toc a')];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, { rootMargin: '0px 0px -70% 0px' });
+  document.querySelectorAll('main h2[id]').forEach(h => observer.observe(h));
+</script>
+</body>
+</html>

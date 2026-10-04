@@ -1,0 +1,13 @@
+.env
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Datos fuente para crear la base mock (se generan con: python generate_mock_data.py)
+data/seed/
+
+# Bases SQLite generadas localmente (se recrean con setup_db.py / el agente)
+data/genpet.db
+checkpoints.sqlite
+checkpoints.sqlite-*
